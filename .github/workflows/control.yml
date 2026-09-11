@@ -1,0 +1,15 @@
+name: control-write
+on:
+  workflow_dispatch:
+cache-mode: write
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir -p payload && echo "control-$(date +%s)" > payload/marker.txt
+      - name: save cache directly (positive control)
+        uses: actions/cache/save@v4
+        with:
+          path: payload
+          key: control-key-${{ github.run_id }}
