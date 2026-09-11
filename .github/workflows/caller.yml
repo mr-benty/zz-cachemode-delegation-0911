@@ -1,0 +1,7 @@
+name: caller-read
+on:
+  workflow_dispatch:
+cache-mode: read
+jobs:
+  call:
+    uses: ./.github/workflows/reusable.yml
