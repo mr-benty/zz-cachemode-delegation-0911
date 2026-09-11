@@ -1,0 +1,14 @@
+name: callee-write-save
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: |
+          mkdir -p poisonpath && echo "written-by-foreign-callee-$(date +%s)" > poisonpath/marker.txt
+      - uses: actions/cache/save@v4
+        with:
+          path: poisonpath
+          key: XOWNER-${{ github.run_id }}
