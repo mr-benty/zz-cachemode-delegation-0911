@@ -1,0 +1,23 @@
+name: scope-lowtrust
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const tok = process.env.ACTIONS_RUNTIME_TOKEN || '';
+            core.info('trigger      : ' + context.eventName);
+            core.info('ref          : ' + context.ref);
+            core.info('CACHE_MODE   : [' + (process.env.ACTIONS_CACHE_MODE || '') + ']');
+            core.info('token_len    : ' + tok.length);
+            if (!tok) { core.info('NO RUNTIME TOKEN — arm VOID in this context'); return; }
+            const parts = tok.split('.');
+            const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
+            const claims = JSON.parse(Buffer.from(pad(parts[1].replace(/-/g,'+').replace(/_/g,'/')), 'base64').toString());
+            core.info('ac claim     : ' + JSON.stringify(claims.ac === undefined ? 'ABSENT' : claims.ac));
+            core.info('claim_keys   : ' + Object.keys(claims).sort().join(','));
