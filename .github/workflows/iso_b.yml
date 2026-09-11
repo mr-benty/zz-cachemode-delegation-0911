@@ -1,0 +1,6 @@
+name: iso-b-plain-reusable
+on:
+  workflow_dispatch:
+jobs:
+  call:
+    uses: ./.github/workflows/reusable_plain.yml
