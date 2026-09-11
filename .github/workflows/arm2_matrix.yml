@@ -1,0 +1,18 @@
+name: arm2-matrix-override
+on:
+  workflow_dispatch:
+cache-mode: read
+jobs:
+  m:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    strategy:
+      matrix:
+        shard: [1, 2]
+    steps:
+      - run: |
+          mkdir -p payload && echo "matrix-${{ matrix.shard }}" > payload/marker.txt
+      - uses: actions/cache/save@v4
+        with:
+          path: payload
+          key: MATRIX-key-${{ github.run_id }}-${{ matrix.shard }}
