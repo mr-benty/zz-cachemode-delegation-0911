@@ -1,0 +1,8 @@
+name: callee-quiet
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "QUIET-CALLEE-RAN (declares no cache-mode, requests nothing)"
