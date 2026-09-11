@@ -1,0 +1,12 @@
+name: save-cache-composite
+description: saves a cache from inside a composite action
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        mkdir -p payload && echo "composite-$(date +%s)" > payload/marker.txt
+    - uses: actions/cache/save@v4
+      with:
+        path: payload
+        key: COMPOSITE-key-${{ github.run_id }}
