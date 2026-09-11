@@ -1,0 +1,7 @@
+name: caller-silent-lowtrust
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  call:
+    uses: ./.github/workflows/callee_write_inspect.yml
