@@ -1,0 +1,9 @@
+name: iso-c-read-normal-job
+on:
+  workflow_dispatch:
+cache-mode: read
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo read-mode-normal-job
