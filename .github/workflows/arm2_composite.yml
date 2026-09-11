@@ -1,0 +1,10 @@
+name: arm2-composite-in-read-job
+on:
+  workflow_dispatch:
+jobs:
+  readjob:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/save-cache
