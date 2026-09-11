@@ -1,0 +1,7 @@
+name: iso-d-read-on-uses-job
+on:
+  workflow_dispatch:
+jobs:
+  call:
+    cache-mode: read
+    uses: ./.github/workflows/reusable.yml
