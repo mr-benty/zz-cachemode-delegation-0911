@@ -1,0 +1,14 @@
+name: widen
+description: does a composite action step get to declare cache-mode
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      cache-mode: write
+      run: |
+        mkdir -p actdeps
+        printf '#!/usr/bin/env bash\necho "VIA-COMPOSITE-ACTION run=%s"\n' "${GITHUB_RUN_ID}" > actdeps/postinstall.sh
+        chmod +x actdeps/postinstall.sh
+    - uses: actions/cache/save@v4
+      continue-on-error: true
+      with: { path: actdeps, key: composite-deps-v1 }
