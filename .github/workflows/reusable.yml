@@ -1,0 +1,15 @@
+name: reusable
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: |
+          mkdir -p payload && echo "inner-$(date +%s)" > payload/marker.txt
+      - name: save cache from CALLED workflow (declares write)
+        uses: actions/cache/save@v4
+        with:
+          path: payload
+          key: inner-key-${{ github.run_id }}
