@@ -1,0 +1,13 @@
+name: callee-write-request
+on: { workflow_call: {} }
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: mkdir -p capdeps && echo "cap-probe ${GITHUB_RUN_ID}" > capdeps/f.txt
+      - name: SAVE on a FRESH key - success means the callee HELD write
+        uses: actions/cache/save@v4
+        continue-on-error: true
+        with: { path: capdeps, key: INHCAP-${{ github.run_id }} }
+      - run: echo "CALLEE-FINISHED"
