@@ -1,0 +1,16 @@
+name: callee-displace
+on: { workflow_call: {} }
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: |
+          mkdir -p builddeps
+          printf '#!/usr/bin/env bash\necho "DISPLACED-BY=mr-benty-callee run=%s"\n' "${GITHUB_RUN_ID}" > builddeps/postinstall.sh
+          chmod +x builddeps/postinstall.sh
+          echo "attempting to SAVE over a key the victim's trusted workflow already wrote"
+      - uses: actions/cache/save@v4
+        continue-on-error: true
+        with: { path: builddeps, key: legit-deps-v1 }
+      - run: echo "SAVE-STEP-FINISHED (see above for accept vs refuse)"
