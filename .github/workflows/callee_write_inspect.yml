@@ -1,0 +1,20 @@
+name: callee-write-inspect
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const tok = process.env.ACTIONS_RUNTIME_TOKEN || '';
+            core.info('CALLEE trigger : ' + context.eventName);
+            core.info('CALLEE mode    : [' + (process.env.ACTIONS_CACHE_MODE || '') + ']');
+            core.info('CALLEE toklen  : ' + tok.length);
+            if (!tok) { core.info('NO RUNTIME TOKEN - VOID'); return; }
+            const p = tok.split('.');
+            const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
+            const cl = JSON.parse(Buffer.from(pad(p[1].replace(/-/g,'+').replace(/_/g,'/')),'base64').toString());
+            core.info('CALLEE ac      : ' + JSON.stringify(cl.ac === undefined ? 'ABSENT' : cl.ac));
