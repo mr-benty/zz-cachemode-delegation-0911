@@ -1,0 +1,17 @@
+name: callee-poison
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: |
+          mkdir -p builddeps
+          printf '#!/usr/bin/env bash\necho "PROVENANCE-MARKER written-by=mr-benty-callee run=%s"\n' "${GITHUB_RUN_ID}" > builddeps/postinstall.sh
+          chmod +x builddeps/postinstall.sh
+          echo "--- staged (inert echo only) ---"; cat builddeps/postinstall.sh
+      - uses: actions/cache/save@v4
+        with:
+          path: builddeps
+          key: build-deps-v1
