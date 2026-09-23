@@ -1,0 +1,16 @@
+name: callee-read-request
+on:
+  workflow_call:
+jobs:
+  inner:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - run: mkdir -p capdeps && echo "wo-probe ${GITHUB_RUN_ID}" > capdeps/f.txt
+      - name: SAVE on a fresh key - under read this MUST fail
+        uses: actions/cache/save@v4
+        continue-on-error: true
+        with:
+          path: capdeps
+          key: WOREAD-${{ github.run_id }}
+      - run: echo "CALLEE-READ-FINISHED"
